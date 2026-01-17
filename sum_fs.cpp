@@ -8,12 +8,21 @@
 
 static std::pair<size_t, size_t> get_subvector(size_t n, unsigned t,
                                                unsigned T) {
-  size_t chunk = n / T;
+  size_t s, b, e;
 
-  size_t begin = t * chunk;
-  size_t end = (t == T - 1) ? n : begin + chunk;
+  if (t < n % T)
+    s = n / T + 1;
+  else
+    s = n / T;
 
-  return {begin, end};
+  if (t <= n % T)
+    b = t * (n / T + 1);
+  else
+    b = t * (n / T) + (n % T);
+
+  e = b + s;
+
+  return {b, e};
 }
 
 class barrier {
@@ -104,9 +113,5 @@ unsigned sum_reduce_cpp(const unsigned *v, size_t n) {
   for (unsigned i = 0; i < T - 1; ++i)
     workers[i].join();
 
-  unsigned result = 0;
-  for (std::size_t t = 0; t < T; t++)
-    result += partial_sums[t].v;
-
-  return result;
+  return partial_sums[0].v;
 }
