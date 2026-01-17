@@ -26,6 +26,7 @@ unsigned sum_seq(const unsigned *, std::size_t);
 unsigned sum_fs(const unsigned *, std::size_t);
 unsigned sum_rr(const unsigned *, std::size_t);
 unsigned sum_rr_fs(const unsigned *, std::size_t);
+unsigned sum_reduce_cpp(const unsigned *, std::size_t);
 
 struct exp_result {
   double time, speedup, efficiency;
@@ -131,6 +132,17 @@ int main(int argc, char *argv[]) {
     auto s = sum_fs(input.data(), input.size());
     auto t2 = std::chrono::steady_clock::now();
     std::cout << "sum_fs: 0x" << std::hex << s << std::dec << " time: "
+              << std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1)
+                     .count()
+              << " μs\n";
+  }
+
+  {
+    auto input = generate(N);
+    auto t1 = std::chrono::steady_clock::now();
+    auto s = sum_reduce_cpp(input.data(), input.size());
+    auto t2 = std::chrono::steady_clock::now();
+    std::cout << "sum_reduce_cpp: 0x" << std::hex << s << std::dec << " time: "
               << std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1)
                      .count()
               << " μs\n";
