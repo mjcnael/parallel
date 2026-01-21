@@ -1,3 +1,0 @@
-```sh
-g++ -o3 -fopenmp main.cpp sum_rr.cpp sum_seq.cpp sum_fs.cpp -o sum_test
-```
